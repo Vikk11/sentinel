@@ -35,7 +35,8 @@ Request body:
 {
   "name": "Shop API",
   "url": "https://api.shop.com/health",
-  "checkIntervalSeconds": 60
+  "checkIntervalSeconds": 60,
+  "enabled": true
 }
 ```
 
@@ -91,6 +92,19 @@ Returns a paginated collection:
 }
 ```
 
+Pagination and sorting rules
+- Default limit is 50.
+- Maximum limit is 100.
+- Limits greater than 100 return 400 Bad Request.
+- Results are ordered by createdAt descending, with UUID as a unique tie-breaker.
+- The cursor represents both createdAt and the service UUID.
+- Cursors are opaque to clients. Clients must not decode, modify, or construct them.
+- The server validates every cursor before using it.
+- Cursors are treated as untrusted input and must never be directly inserted into database queries.
+- Database queries use validated, parameterized values.
+- If no cursor is provided, the newest records are returned.
+- If no more records exist, nextCursor is null and hasMore is false.
+
 Possible errors:
 
 - `401 Unauthorized` – Authentication is missing or invalid.
@@ -123,11 +137,18 @@ Request body:
 {
   "name": "Shop API Production",
   "url": "https://api.shop.com/health",
-  "checkIntervalSeconds": 30
+  "checkIntervalSeconds": 30,
+  "enabled": true
 }
 ```
 
-All editable fields must be provided.
+All editable fields must be provided, including:
+- `name`
+- `url`
+- `checkIntervalSeconds`
+- `enabled`
+
+- `enabled` is required and must be a Boolean. Omitting it returns `400 Bad Request`.
 
 Success response: `200 OK`
 
@@ -160,6 +181,7 @@ Supported fields:
 - `name`
 - `url`
 - `checkIntervalSeconds`
+- `enabled`
 
 Fields not included remain unchanged.
 
@@ -216,7 +238,7 @@ Query parameters:
 
 Example request:
 
-`GET /v1/services/123/checks?limit=50`
+`GET /v1/services/550e8400-e29b-41d4-a716-446655440000/checks?limit=50`
 
 Example response:
 
@@ -224,14 +246,15 @@ Example response:
 {
   "data": [
     {
-      "id": "check-001",
+      "id": "550e8400-e29b-41d4-a716-446655440001",
       "status": "SUCCESS",
       "statusCode": 200,
       "latencyMs": 145,
+      "errorType": null,
       "checkedAt": "2026-11-12T10:30:00Z"
     },
     {
-      "id": "check-002",
+      "id": "550e8400-e29b-41d4-a716-446655440002",
       "status": "FAILURE",
       "statusCode": null,
       "latencyMs": 5000,
@@ -239,7 +262,7 @@ Example response:
       "checkedAt": "2026-11-12T10:29:00Z"
     }
   ],
-  "nextCursor": "eyJjaGVja2VkQXQiOiIyMDI2LTExLTEyVDEwOjI5OjAwWiJ9",
+  "nextCursor": "opaque-cursor-token",
   "hasMore": true
 }
 ```
@@ -252,7 +275,7 @@ Check result fields:
 | `status` | String | SUCCESS or FAILURE. |
 | `statusCode` | Integer or null | HTTP response status code. Null when no HTTP response was received. |
 | `latencyMs` | Integer | Duration of the check in milliseconds. |
-| `errorType` | String or null | Failure reason when applicable. |
+| `errorType` | String or null | Failure reason when applicable. Always included; null for successful checks. |
 | `checkedAt` | DateTime | Time when the check was executed. |
 
 Supported error types:
@@ -261,6 +284,7 @@ Supported error types:
 - `DNS_FAILURE`
 - `TLS_ERROR`
 - `CONNECTION_REFUSED`
+- `BLOCKED_DESTINATION`
 
 For successful checks, errorType is null.
 For failures without an HTTP response, statusCode is null.
@@ -288,6 +312,7 @@ Possible errors:
 - `400 Bad Request` – Invalid cursor or limit outside the allowed range.
 - `401 Unauthorized` – Authentication is missing or invalid.
 - `404 Not Found` – Service does not exist within the authenticated tenant.
+- `403 Forbidden` – The authenticated user does not have permission to view check history.
 
 ---
 
@@ -324,6 +349,7 @@ Fields:
 | `name` | String | Display name of the monitored service. Required. |
 | `url` | String | URL Sentinel should monitor. Required. |
 | `checkIntervalSeconds` | Integer | Interval between health checks. Required. |
+| `enabled`                   | Boolean | Whether monitoring is enabled. Optional; defaults to true.  |
 
 Validation:
 
@@ -338,7 +364,7 @@ Returned when retrieving or modifying a monitored service.
 
 ```json
 {
-  "id": "service-001",
+  "id": "550e8400-e29b-41d4-a716-446655440000",
   "name": "Shop API",
   "url": "https://api.shop.com/health",
   "checkIntervalSeconds": 60,
@@ -352,7 +378,7 @@ Fields:
 
 | Field | Type | Description |
 |---|---|---|
-| `id` | String | Unique service identifier. |
+| `id` | UUID | Unique service identifier. |
 | `name` | String | Display name. |
 | `url` | String | Monitored endpoint URL. |
 | `checkIntervalSeconds` | Integer | Configured check interval. |
