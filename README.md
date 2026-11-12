@@ -42,9 +42,13 @@ Sentinel is a multi-tenant monitoring and incident management platform that help
 
 ## Project Status
 
-**Week 1: Project Setup**
+**Week 1 complete**
+- Repository
+- ADR-0001 and API draft
+- No runnable code yet
 
-- Repository structure and API design
+**Week 2**
+- Spring Boot skeleton
 
 ---
 
