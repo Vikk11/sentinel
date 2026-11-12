@@ -19,7 +19,7 @@ Sentinel is a multi-tenant monitoring and incident management platform that help
 - **Data Ingestion** – Event, error, and metric ingestion through API keys and Kafka.
 - **Security Insights** – TLS certificate monitoring, port exposure checks on user-owned services, and security analysis.
 - **AI-Powered Insights** – Anomaly detection and AI-generated incident summaries using RAG.
-- Plans, usage metering and payment handling (Stripe test mode)
+- **Billing** - Plans, usage metering and payment handling (Stripe test mode)
 
 ## Planned Tech Stack
 
