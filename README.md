@@ -17,8 +17,9 @@ Sentinel is a multi-tenant monitoring and incident management platform that help
 - **Dashboard** – Live service status, uptime statistics, latency charts, and incident history.
 - **Public Status Pages** – Share real-time service availability with customers.
 - **Data Ingestion** – Event, error, and metric ingestion through API keys and Kafka.
-- **Security Insights** – TLS certificate monitoring, exposed port detection, and security analysis.
+- **Security Insights** – TLS certificate monitoring, port exposure checks on user-owned services, and security analysis.
 - **AI-Powered Insights** – Anomaly detection and AI-generated incident summaries using RAG.
+- Plans, usage metering and payment handling (Stripe test mode)
 
 ## Planned Tech Stack
 
@@ -43,13 +44,7 @@ Sentinel is a multi-tenant monitoring and incident management platform that help
 
 **Week 1: Project Setup**
 
-Currently in the initial setup phase.
-
-The focus is on:
-- Establishing the project structure.
-- Configuring the development environment.
-- Setting up the initial backend and frontend foundations.
-- Preparing the infrastructure for future development.
+- Repository structure and API design
 
 ---
 
