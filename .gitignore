@@ -1,11 +1,31 @@
-# Env variables
-.env
+# Env variables and secrets
+.env*
+!.env.example
+*.pem
+*.key
 
 #Java/Maven
 target/
 *.class
+*.log
 !.mvn/wrapper/maven-wrapper.jar
 
-# IDE
+# IDEs
 .idea/
 *.iml
+.vscode/
+
+# Node/frontend
+node_modules/
+build/
+dist/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform/
+
+# OS
+Thumbs.db
+.DB_Store
