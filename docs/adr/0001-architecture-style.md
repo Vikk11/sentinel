@@ -1,5 +1,8 @@
 # ADR-0001: Choose a Modular Monolith Architecture
 
+## Status
+Accepted
+
 ## Context
 
 Sentinel is a multi-tenant monitoring and incident management platform. It needs to support service health checks, incident management, alerting, user authentication, and role-based access control.
@@ -41,8 +44,9 @@ For a solo developer, maintaining all these components would take time away from
 
 - All modules must be deployed together.
 - Individual modules cannot be scaled independently.
-- A failure in the application can affect the entire backend.
+- A failure in the application can affect the entire backend, for example a runaway check worker could exhaust threads or memory and take the API down with it.
 - Extracting modules into independent services later may require refactoring.
+- Module boundaries are enforced only by convention, so they can erode.
 
 ## Future Considerations
 
