@@ -47,8 +47,97 @@ Sentinel is a multi-tenant monitoring and incident management platform that help
 - ADR-0001 and API draft
 - No runnable code yet
 
-**Week 2**
-- Spring Boot skeleton
+**Week 2 complete**
+- Runnable Spring Boot backend, module structure, typed configuration, request ID logging.
+
+## Technology Stack
+
+- Java 21 LTS
+- Spring Boot 4.1
+- Maven
+- Maven Wrapper
+
+## Project Structure
+
+The backend is organized into feature-oriented modules:
+
+- `monitoring` - Service monitoring and health checks.
+- `incidents` - Incident management.
+- `identity` - User identity and authentication.
+- `billing` - Subscription and billing functionality.
+- `platform` - Technical cross-cutting infrastructure.
+
+## How to Run Locally
+
+### Prerequisites
+
+- JDK 21
+- Git
+
+Maven does not need to be installed separately because
+the project includes the Maven Wrapper.
+
+### Start the application
+
+Open a terminal in the `backend/` directory and run:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
+The application starts on:
+
+http://localhost:8080
+
+### Run tests
+
+From the `backend/` directory:
+
+```
+.\mvnw.cmd test
+```
+
+### Check application health
+
+With the application running, execute:
+
+```
+curl.exe -i http://localhost:8080/actuator/health
+```
+
+A successful response should return HTTP 200 and report the application status as `UP`.
+
+The response includes an `X-Request-Id` header for request correlation.
+
+## Configuration
+
+Monitoring settings can be configured through environment variables.
+
+| Environment variable | Default | Valid values |
+|---|---|---|
+| SENTINEL_CHECKS_TIMEOUT | 5s| 1-30 seconds|
+| SENTINEL_CHECKS_MAX_REDIRECTS | 3| 0-10  |
+| SENTINEL_CHECKS_USER_AGENT  | Sentinel-Monitor/1.0 | Non-blank string |
+
+Environment variables override values defined in `application.yml`.
+
+### Development profile
+
+The development profile can be activated with:
+
+```
+$env:SPRING_PROFILES_ACTIVE = "dev"
+.\mvnw.cmd spring-boot:run
+```
+
+The development profile enables DEBUG logging for com.sentinel.
+
+## Development
+
+Run the automated tests before committing changes:
+
+```
+.\mvnw.cmd test
+```
 
 ---
 
