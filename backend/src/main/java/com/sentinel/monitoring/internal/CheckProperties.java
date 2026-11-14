@@ -17,9 +17,10 @@ public record CheckProperties(
         @NotNull
         Duration timeout,
 
+        @NotNull
         @Min(0)
         @Max(10)
-        int maxRedirects,
+        Integer maxRedirects,
 
         @NotBlank
         String userAgent

@@ -7,3 +7,7 @@ sentinel:
     timeout: 5s
     max-redirects: 3
     user-agent: Sentinel-Monitor/1.0
+
+logging:
+  pattern:
+    level: "%5p [%X{requestId:-}]"
