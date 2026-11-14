@@ -8,7 +8,9 @@
 target/
 *.class
 *.log
-!.mvn/wrapper/maven-wrapper.jar
+HELP.md
+*.iws
+*.ipr
 
 # IDEs
 .idea/
