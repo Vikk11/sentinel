@@ -47,6 +47,9 @@ public class RequestIdFilter extends OncePerRequestFilter {
 
                 String method = request.getMethod();
                 String path = request.getRequestURI();
+
+                // If the chain throws, the status may still read 200 here.
+                // The global exception handler (Week 3) will fix this.
                 int status = response.getStatus();
 
                 if (path.equals("/actuator") || path.startsWith("/actuator/")) {
