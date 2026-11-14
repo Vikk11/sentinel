@@ -6,74 +6,112 @@ Accepted — 2026-11-14
 
 ## Context
 
-Sentinel needs a stable technology foundation for its backend.
 
-The project will need to support service monitoring, health checks,
-incident management, authentication, and billing.
+Sentinel is a service-monitoring application that will need to:
 
-The technology choices should make the project maintainable,
-easy to develop, and suitable for adding new features over time.
+- Execute scheduled HTTP health checks and handle network failures.
+- Expose a REST API for managing monitored services and retrieving check results.
+- Support authentication, authorization, and tenant isolation.
+- Integrate with messaging infrastructure such as Kafka as the system evolves.
+- Provide reliable automated testing, configuration validation, and operational
+  visibility.
+
+The project needs a Java ecosystem with mature libraries for web development, 
+security, messaging, testing, and production operations. The initial 
+technology choices should also be straightforward to run locally and maintain.
 
 ## Decision
 
-The backend will use the following technologies:
+The initial technology baseline is:
 
 - **Java 21 LTS** as the programming language and runtime.
 - **Spring Boot 4.1** as the application framework.
 - **Maven** as the build and dependency management tool,
   using the Maven Wrapper to ensure consistent builds.
 
-Java 21 was selected because it is a long-term support release
-and provides modern Java features while maintaining stability.
+Java 21 is selected because it is the Java LTS version currently configured
+and tested for this project. Spring Boot 4.1 supports Java 21, so this is a
+supported combination. Java 25 is also an LTS release and is supported by
+Spring Boot 4.1; upgrading the project's Java baseline can be evaluated
+separately after testing the build, dependencies, and deployment environment.
 
-Spring Boot was selected because it provides dependency
-injection, configuration management, validation, and
-integration with common backend technologies.
+Spring Boot is selected for its mature application framework and ecosystem.
+It provides the foundation for REST APIs, dependency injection, externalized
+configuration, validation, security integration, health checks, and testing.
+Its ecosystem also provides established integration options for technologies
+such as Kafka.
 
-Maven was selected because it is widely used in Java projects
-and provides a predictable way to manage dependencies and builds.
-The Maven Wrapper allows developers to run the project without
-having to install Maven separately.
+Spring Boot 4.1 was selected because it is a currently supported release line.
+Spring Boot's published support policy provides at least 12 months of support
+for minor releases. Version 4.1.0 was released on June 10, 2026, giving the
+release line a meaningful support window for a new project. The project must
+continue tracking supported patch releases rather than remain on its initial
+4.1.x version indefinitely.
+
+Maven is selected because it is familiar, convention-based, and sufficient
+for the project's current build requirements. The Maven Wrapper ensures that
+contributors can use the project's configured Maven version without installing
+Maven separately.
 
 ## Alternatives Considered
 
+### Java 25 instead of Java 21
+
+Java 25 is a newer LTS release and is supported by Spring Boot 4.1. It is a
+valid alternative and may become the project's baseline after compatibility
+testing.
+
+Java 21 was retained for the initial implementation because it is the version
+already tested and configured in the project. This is a practical consistency
+decision, not a claim that Java 21 has a longer support lifetime than Java 25.
+
 ### Gradle instead of Maven
 
-Gradle offers flexible build configuration and can be faster
-for larger projects with incremental builds.
+Gradle offers flexible build configuration and can provide efficient
+incremental builds. Maven was preferred because its conventions are familiar,
+its build structure is predictable, and the project's current build needs do
+not justify Gradle's additional flexibility.
 
-However, Maven has a more familiar and convention-based structure.
-For this project, its simplicity and predictable configuration
-are preferred.
+### Kotlin instead of Java
+
+Kotlin offers concise syntax, null-safety features, and Spring integration.
+Java was selected to keep the initial implementation aligned with the
+project's tested baseline and conventional Spring examples. Kotlin remains
+a possible option for future work, but mixing languages is not justified
+for the current scope.
 
 ### Spring Boot 3.x instead of Spring Boot 4.1
 
-Spring Boot 3.x is more established and has a larger amount of
-available tutorials and community examples.
+Spring Boot 3.x has a larger body of tutorials, examples, and community
+experience. However, selecting an older release line for a new project
+can shorten the remaining period of official support and bring forward
+the need for a framework upgrade.
 
-Spring Boot 4.1 was selected as the project baseline to use
-the newer framework generation.
-
-One disadvantage is that Spring Boot 4.1 is relatively new,
-so some tutorials and examples still target Spring Boot 3.x.
-This may require checking documentation and adapting older examples.
+Spring Boot 4.1 was selected as a currently supported release line rather
+than simply because it is newer. The trade-off is that Boot 4 is a newer
+framework generation: many tutorials and examples still target Boot 3.x,
+and some dependencies or migration instructions may require adaptation.
 
 ## Consequences
 
 ### Positive
 
-- Java 21 provides a modern and stable LTS foundation.
-- Spring Boot simplifies application configuration and development.
-- Maven provides a predictable build structure.
-- The Maven Wrapper makes builds more consistent across environments.
-- The selected technologies have strong integration with the Java ecosystem.
+- The project starts on a supported Spring Boot release line.
+- Java 21 provides an established LTS baseline that has already been tested
+  with the project.
+- Spring provides mature options for REST APIs, security, Kafka integration,
+  validation, and automated testing.
+- Maven provides a conventional and reproducible build through its wrapper.
+- The technology choices are widely used and have established documentation
+  and community support.
 
 ### Negative
 
-- Spring Boot 4.1 is newer, so fewer tutorials may be available.
-- Some libraries and examples written for Spring Boot 3.x
-  may require changes.
-- Maven can require more configuration than Gradle for
-  certain complex build scenarios.
-
-These trade-offs are accepted for the initial Sentinel backend.
+- Java 25 is a newer LTS release; retaining Java 21 means the project should
+  revisit its Java baseline rather than assume 21 is the long-term choice.
+- Spring Boot 4.x is relatively new, and many online tutorials still target
+  Spring Boot 3.x.
+- Some third-party libraries and examples may need compatibility checks
+  or adaptation for Spring Boot 4.
+- Maven can require more verbose configuration than Gradle for complex builds.
+- Java is more verbose than Kotlin for some application code.

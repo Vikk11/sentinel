@@ -81,9 +81,14 @@ the project includes the Maven Wrapper.
 
 Open a terminal in the `backend/` directory and run:
 
-```powershell
+```Windows
 .\mvnw.cmd spring-boot:run
 ```
+
+```Linux/ macOS
+./mvnw spring-boot:run
+```
+
 The application starts on:
 
 http://localhost:8080
@@ -92,16 +97,24 @@ http://localhost:8080
 
 From the `backend/` directory:
 
-```
+```Windows
 .\mvnw.cmd test
+```
+
+```Linux/ macOS
+./mvnw test
 ```
 
 ### Check application health
 
 With the application running, execute:
 
-```
+```Windows
 curl.exe -i http://localhost:8080/actuator/health
+```
+
+```Linux/ macOS
+curl -i http://localhost:8080/actuator/health
 ```
 
 A successful response should return HTTP 200 and report the application status as `UP`.
@@ -130,6 +143,12 @@ $env:SPRING_PROFILES_ACTIVE = "dev"
 ```
 
 The development profile enables DEBUG logging for com.sentinel.
+
+To return to the default profile:
+
+```
+Remove-Item Env:SPRING_PROFILES_ACTIVE
+```
 
 ## Development
 
