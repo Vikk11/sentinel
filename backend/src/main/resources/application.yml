@@ -1,3 +1,9 @@
 spring:
   application:
     name: sentinel
+
+sentinel:
+  checks:
+    timeout: 5s
+    max-redirects: 3
+    user-agent: Sentinel-Monitor/1.0
