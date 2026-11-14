@@ -35,17 +35,11 @@ class RequestIdFilterTest {
         MockHttpServletResponse response =
                 new MockHttpServletResponse();
 
-        // MockFilterChain represents the downstream servlet.
-        MockFilterChain mockFilterChain =
-                new MockFilterChain(new HttpServlet() {});
-
         AtomicReference<String> requestIdInsideChain =
                 new AtomicReference<>();
 
-        // Custom chain lets us inspect MDC while the request is running.
         FilterChain customChain = (req, res) -> {
             requestIdInsideChain.set(MDC.get("requestId"));
-            mockFilterChain.doFilter(req, res);
         };
 
         filter.doFilter(request, response, customChain);
@@ -53,14 +47,9 @@ class RequestIdFilterTest {
         String responseId = response.getHeader("X-Request-Id");
 
         assertNotNull(responseId);
-
-        // Verify that the response ID is a valid UUID.
         assertDoesNotThrow(() -> UUID.fromString(responseId));
 
-        // Verify that the ID inside the chain matches the response header.
         assertEquals(responseId, requestIdInsideChain.get());
-
-        // Verify that MDC was cleaned after the request.
         assertNull(MDC.get("requestId"));
     }
 
