@@ -115,3 +115,14 @@ and some dependencies or migration instructions may require adaptation.
   or adaptation for Spring Boot 4.
 - Maven can require more verbose configuration than Gradle for complex builds.
 - Java is more verbose than Kotlin for some application code.
+
+## References
+
+- Spring Boot support policy:
+  https://github.com/spring-projects/spring-boot/wiki/Supported-Versions
+- Spring Boot 4.1 system requirements:
+  https://docs.spring.io/spring-boot/system-requirements.html
+- Spring Boot 4.1.0 release announcement:
+  https://spring.io/blog/2026/06/10/spring-boot-4/
+- Oracle Java SE support roadmap:
+  https://www.oracle.com/java/technologies/java-se-support-roadmap.html

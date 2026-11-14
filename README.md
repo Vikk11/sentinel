@@ -81,11 +81,11 @@ the project includes the Maven Wrapper.
 
 Open a terminal in the `backend/` directory and run:
 
-```Windows
+```powershell
 .\mvnw.cmd spring-boot:run
 ```
 
-```Linux/ macOS
+```bash
 ./mvnw spring-boot:run
 ```
 
@@ -97,11 +97,11 @@ http://localhost:8080
 
 From the `backend/` directory:
 
-```Windows
+```powershell
 .\mvnw.cmd test
 ```
 
-```Linux/ macOS
+```bash
 ./mvnw test
 ```
 
@@ -109,11 +109,11 @@ From the `backend/` directory:
 
 With the application running, execute:
 
-```Windows
+```powershell
 curl.exe -i http://localhost:8080/actuator/health
 ```
 
-```Linux/ macOS
+```bash
 curl -i http://localhost:8080/actuator/health
 ```
 
