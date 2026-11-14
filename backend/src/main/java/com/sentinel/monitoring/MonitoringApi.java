@@ -5,6 +5,6 @@ import java.util.UUID;
 
 public interface MonitoringApi {
 
-    List<CheckResultView> recentChecks(UUID serviceId, int limit);
+    List<CheckResultView> recentChecks(UUID tenantId, UUID serviceId, int limit);
 
 }
