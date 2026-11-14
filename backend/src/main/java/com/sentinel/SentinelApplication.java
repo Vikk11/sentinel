@@ -1,13 +1,13 @@
-package com.sentinel.sentinel_backend;
+package com.sentinel;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SentinelBackendApplication {
+public class SentinelApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SentinelBackendApplication.class, args);
+		SpringApplication.run(SentinelApplication.class, args);
 	}
 
 }
