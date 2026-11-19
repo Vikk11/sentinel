@@ -150,6 +150,8 @@ To return to the default profile:
 Remove-Item Env:SPRING_PROFILES_ACTIVE
 ```
 
+The dev profile provides a fixed development tenant. The application intentionally refuses to start without an explicit profile because no production tenant authentication implementation exists yet.
+
 ## Development
 
 Run the automated tests before committing changes:
