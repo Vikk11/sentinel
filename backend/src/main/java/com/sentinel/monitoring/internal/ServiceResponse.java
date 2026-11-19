@@ -7,7 +7,7 @@ record ServiceResponse(
         UUID id,
         String name,
         String url,
-        Integer checkInternalSeconds,
+        int checkIntervalSeconds,
         boolean enabled,
         Instant createdAt,
         Instant updatedAt
