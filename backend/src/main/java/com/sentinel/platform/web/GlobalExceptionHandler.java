@@ -1,6 +1,5 @@
 package com.sentinel.platform.web;
 
-import jakarta.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -67,7 +66,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error ocurred."
+                "An unexpected error occurred."
         );
 
         problem.setTitle("Internal Server Error");
