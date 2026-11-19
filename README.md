@@ -121,6 +121,14 @@ A successful response should return HTTP 200 and report the application status a
 
 The response includes an `X-Request-Id` header for request correlation.
 
+### Note
+
+The `dev` profile provides a fixed tenant for local development.
+The application intentionally refuses to start without an explicit
+profile because production tenant authentication is not implemented yet.
+
+See development profile section for more information.
+
 ## Configuration
 
 Monitoring settings can be configured through environment variables.
@@ -149,8 +157,6 @@ To return to the default profile:
 ```
 Remove-Item Env:SPRING_PROFILES_ACTIVE
 ```
-
-The dev profile provides a fixed development tenant. The application intentionally refuses to start without an explicit profile because no production tenant authentication implementation exists yet.
 
 ## Development
 
