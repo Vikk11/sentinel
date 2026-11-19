@@ -59,7 +59,14 @@ class ServiceService {
     }
 
     private void validateUrl(String url){
-        URI uri = URI.create(url);
+        URI uri;
+
+        try {
+            uri = URI.create(url);
+        } catch (IllegalArgumentException ex) {
+            throw new InvalidServiceUrlException();
+        }
+
         String scheme = uri.getScheme();
 
         if (scheme == null
@@ -67,10 +74,9 @@ class ServiceService {
                 || scheme.equalsIgnoreCase("https"))
                 || uri.getHost() == null
                 || uri.getHost().isBlank()
+                || uri.getUserInfo() != null
         ) {
-            throw new IllegalArgumentException(
-                    "URL must have an http or https scheme and a valid host"
-            );
+            throw new InvalidServiceUrlException();
         }
 
         //TODO(phase 5): SSRF validation
