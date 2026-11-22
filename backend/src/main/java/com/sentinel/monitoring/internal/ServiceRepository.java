@@ -4,6 +4,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 interface ServiceRepository {
-    MonitoredService save(MonitoredService service);
+    boolean createIfUrlUnique(MonitoredService service);
     Optional<MonitoredService> findByIdAndTenantId(UUID id, UUID tenantId);
+    ReplaceResult replaceIfUrlUnique(MonitoredService service);
+    boolean deleteByIdAndTenantId(UUID id, UUID tenantId);
+}
+
+enum ReplaceResult {
+    UPDATED,
+    DUPLICATE_URL,
+    NOT_FOUND
 }

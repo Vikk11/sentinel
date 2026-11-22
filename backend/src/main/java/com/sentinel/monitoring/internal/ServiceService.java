@@ -24,6 +24,8 @@ class ServiceService {
 
         validateUrl(request.url());
 
+        String normalizedUrl = ServiceUrlNormalizer.normalize(request.url());
+
         Instant now = Instant.now();
 
         MonitoredService service = new MonitoredService(
@@ -31,13 +33,16 @@ class ServiceService {
                 tenantId,
                 request.name(),
                 request.url(),
+                normalizedUrl,
                 request.checkIntervalSeconds(),
                 request.enabled(),
                 now,
                 now
         );
 
-        repository.save(service);
+        if (!repository.createIfUrlUnique(service)) {
+            throw new DuplicateServiceUrlException();
+        }
 
         log.info(
                 "Service created: serviceId={}, tenantId={}",
@@ -80,5 +85,67 @@ class ServiceService {
         }
 
         //TODO(phase 5): SSRF validation
+    }
+
+    ServiceResponse replace(UUID id, ReplaceServiceRequest request) {
+        UUID tenantId = tenantContext.currentTenantId();
+
+        MonitoredService existing = repository
+                .findByIdAndTenantId(id, tenantId)
+                .orElseThrow(() -> new ServiceNotFoundException(id));
+
+        validateUrl(request.url());
+
+        String normalizedUrl = ServiceUrlNormalizer.normalize(request.url());
+
+        MonitoredService candidate = new MonitoredService(
+                existing.id(),
+                existing.tenantId(),
+                request.name(),
+                request.url(),
+                normalizedUrl,
+                request.checkIntervalSeconds(),
+                request.enabled(),
+                existing.createdAt(),
+                existing.updatedAt()
+        );
+
+        if (candidate.equals(existing)){
+            return ServiceResponse.from(existing);
+        }
+
+        Instant now = Instant.now();
+
+        if (!now.isAfter(existing.updatedAt())) {
+            now = existing.updatedAt().plusNanos(1);
+        }
+
+        MonitoredService replacement = new MonitoredService(
+                existing.id(),
+                existing.tenantId(),
+                request.name(),
+                request.url(),
+                normalizedUrl,
+                request.checkIntervalSeconds(),
+                request.enabled(),
+                existing.createdAt(),
+                now
+        );
+
+        ReplaceResult result = repository.replaceIfUrlUnique(replacement);
+
+        return switch (result) {
+            case UPDATED -> ServiceResponse.from(replacement);
+            case DUPLICATE_URL -> throw new DuplicateServiceUrlException();
+            case NOT_FOUND -> throw new ServiceNotFoundException(id);
+        };
+    }
+
+    void delete(UUID id) {
+        UUID tenantId = tenantContext.currentTenantId();
+
+        if (!repository.deleteByIdAndTenantId(id, tenantId)) {
+            throw new ServiceNotFoundException(id);
+        }
     }
 }

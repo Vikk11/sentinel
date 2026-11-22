@@ -49,4 +49,21 @@ class MonitoringExceptionHandler{
                 .contentType(MediaType.APPLICATION_PROBLEM_JSON)
                 .body(problem);
     }
+
+    @ExceptionHandler(DuplicateServiceUrlException.class)
+    ResponseEntity<ProblemDetail> handleDuplicateUrl(DuplicateServiceUrlException exception) {
+        log.info("Duplicate monitored service URL rejected");
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                "A service with this URL already exists."
+        );
+
+        problem.setTitle("Conflict");
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+                .body(problem);
+    }
 }

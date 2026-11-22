@@ -8,6 +8,7 @@ record MonitoredService(
         UUID tenantId,
         String name,
         String url,
+        String normalizedUrl,
         int checkIntervalSeconds,
         boolean enabled,
         Instant createdAt,
